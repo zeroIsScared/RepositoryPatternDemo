@@ -14,9 +14,10 @@ namespace RepositoryPattern.Data
     {
         private readonly List<T> _items = new List<T>();
 
-        public T GetById(int id)
+        public T? GetById(int id)
         {
-            T itemSearched = null;
+            T? itemSearched = null;
+            
             List<int> listOfExistingIds = new List<int>();  
 
             foreach (T item in _items)
@@ -28,12 +29,13 @@ namespace RepositoryPattern.Data
                     Console.WriteLine($"The item with id {id} is {itemSearched.Name}( from GetBYId method)");
                     return itemSearched;
                 }
-            }
-
-            if(listOfExistingIds.Contains(id) == false)
+            }           
+/*
+            if (listOfExistingIds.Contains(id) == false)
             {
+                return itemSearched;
                 throw new ArgumentException($"The item with id {id} was not found");
-            }
+            }*/
             return itemSearched;
         }
 
@@ -48,7 +50,7 @@ namespace RepositoryPattern.Data
             return entity;
         }
 
-        public int Update(T entity)
+        public int? Update(T entity)
         {
             if (_items.Contains(entity) == false) 
             {

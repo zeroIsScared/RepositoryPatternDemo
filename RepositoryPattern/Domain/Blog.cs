@@ -28,7 +28,7 @@ namespace RepositoryPattern.Domain
                 Console.WriteLine("Open connection to database");
                 User user = _userRepository.GetById(userId);
                 Post post = _postRepository.GetById(postId);
-
+                
                 if (user == null)
                 {                   
                     Console.WriteLine($"Customer with id {userId} was not found");

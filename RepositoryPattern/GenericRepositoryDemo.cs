@@ -9,32 +9,31 @@ public class GenericRepositoryPatternDemo
     {
         IRepository<Post> postRepository = new Repository<Post>();
         IRepository<User> userRepository = new Repository<User>();
-
-        userRepository.Add(new User { Id = 1, Email = "user1@gmail.com", Name = "Karl Yang", Points = 0, PostedItems = 0 });
-        userRepository.Add(new User { Id = 2, Email = "user2@gmail.com", Name = "Jhon Doe", Points = 30, PostedItems = 10 });
-
-        postRepository.Add(new Post { Id = 1, Name = "My story", Category = "Personal", IsPosted = false });
-        postRepository.Add(new Post { Id = 2, Name = "At work", IsPosted = false });
-
-        var item1 = postRepository.GetById(1);
-        Console.WriteLine(item1.Name);
-
-        var listName = userRepository.GetAll();
-        foreach (var item in listName)
-        {
-            Console.WriteLine(item.Name);
-        }
-
-        Blog blog = new Blog(userRepository, postRepository);
+    
         try
         {
-            Console.WriteLine("Open connection to database");
+            userRepository.Add(new User { Id = 1, Email = "user1@gmail.com", Name = "Karl Yang", Points = 0, PostedItems = 0 });
+            userRepository.Add(new User { Id = 2, Email = "user2@gmail.com", Name = "Jhon Doe", Points = 30, PostedItems = 10 });
+
+            postRepository.Add(new Post { Id = 1, Name = "My story", Category = "Personal", IsPosted = false });
+            postRepository.Add(new Post { Id = 2, Name = "At work", IsPosted = false });
+
+            var item1 = postRepository.GetById(5);
+            Console.WriteLine(item1);
+
+            var listName = userRepository.GetAll();
+            foreach (var item in listName)
+            {
+                Console.WriteLine(item.Name);
+            }
+
+            Blog blog = new Blog(userRepository, postRepository);
+          
             blog.PublishPost(1, 1);
             blog.PublishPost(2, 2);
             blog.PublishPost(2, 1);
             blog.PublishPost(3, 1);
-            blog.PublishPost(1, 3);
-            
+            blog.PublishPost(1, 3);            
         }
         catch (DataException ex)
         {
@@ -44,7 +43,7 @@ public class GenericRepositoryPatternDemo
         {
             Console.WriteLine(ex.Message);
         }
-#if (DEBUG)
+#if (RELEASE)
 catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
