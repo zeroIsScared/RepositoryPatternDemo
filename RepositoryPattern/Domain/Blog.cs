@@ -1,4 +1,5 @@
-﻿using RepositoryPattern.Interfaces;
+﻿using RepositoryPattern.Exceptions;
+using RepositoryPattern.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,13 +27,13 @@ namespace RepositoryPattern.Domain
             try
             {
                 Console.WriteLine("Open connection to database");
+
                 User user = _userRepository.GetById(userId);
-                Post post = _postRepository.GetById(postId);
-                
+                Post post = _postRepository.GetById(postId);               
+
                 if (user == null)
-                {                   
-                    Console.WriteLine($"Customer with id {userId} was not found");
-                    return false;
+                {
+                    throw new EntityNotFoundException($"The item with id {userId} was not found");                    
                 }
 
                 if (user.Points < 5)
@@ -43,8 +44,8 @@ namespace RepositoryPattern.Domain
 
                 if (post == null)
                 {
-                    Console.WriteLine($"Post with {postId} was not found");
-                    return false;
+                    throw new EntityNotFoundException($"The item with id {postId} was not found");
+                    
                 }
 
                 if (post.Category == null)

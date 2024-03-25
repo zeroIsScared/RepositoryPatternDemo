@@ -1,4 +1,5 @@
 ﻿using RepositoryPattern.Domain;
+using RepositoryPattern.Exceptions;
 using RepositoryPattern.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,27 +17,18 @@ namespace RepositoryPattern.Data
 
         public T? GetById(int id)
         {
-            T? itemSearched = null;
-            
-            List<int> listOfExistingIds = new List<int>();  
-
-            foreach (T item in _items)
-            {
-                listOfExistingIds.Add(item.Id);
-                if (item.Id == id)
-                {
-                   itemSearched = item;
-                    Console.WriteLine($"The item with id {id} is {itemSearched.Name}( from GetBYId method)");
-                    return itemSearched;
+            T? itemSearched = null;        
+                
+                foreach (T item in _items)
+                {                    
+                    if (item.Id == id)
+                    {
+                        itemSearched = item;                      
+                        return itemSearched;
+                    }
                 }
-            }           
-/*
-            if (listOfExistingIds.Contains(id) == false)
-            {
-                return itemSearched;
-                throw new ArgumentException($"The item with id {id} was not found");
-            }*/
-            return itemSearched;
+
+            return itemSearched;        
         }
 
         public IList<T> GetAll()
@@ -51,24 +43,19 @@ namespace RepositoryPattern.Data
         }
 
         public int? Update(T entity)
-        {
-            if (_items.Contains(entity) == false) 
-            {
-                throw new DataException("Can't update an inexistent item.");
-            }
-
+        {      
             for (int j = 0; j < _items.Count; j++)
             {
                 T item = _items[j];
                 if (item.Id == entity.Id)
                 {
                   var position = _items.IndexOf(item);
-                    _items[position] = entity;
-                    Console.WriteLine($"The item {_items[position].Name}");
+                    _items[position] = entity;                   
                 }
             }
             return entity.Id;
         }
+
         public void Delete(int id)
         {
             foreach (T item in _items)
@@ -77,12 +64,7 @@ namespace RepositoryPattern.Data
                 {
                     _items.Remove(item);
                     break;
-                }
-                else
-                {
-                    throw new DataException("Item you want to delete was not found!");
-
-                }
+                }                
             }
         }
     }

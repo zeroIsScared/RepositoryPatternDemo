@@ -1,7 +1,9 @@
 ﻿using RepositoryPattern.Data;
 using RepositoryPattern.Domain;
+using RepositoryPattern.Exceptions;
 using RepositoryPattern.Interfaces;
 using System.Data;
+using System.Xml.Linq;
 
 public class GenericRepositoryPatternDemo
     {
@@ -18,33 +20,35 @@ public class GenericRepositoryPatternDemo
             postRepository.Add(new Post { Id = 1, Name = "My story", Category = "Personal", IsPosted = false });
             postRepository.Add(new Post { Id = 2, Name = "At work", IsPosted = false });
 
-            var item1 = postRepository.GetById(5);
-            Console.WriteLine(item1);
+            var item1 = postRepository.GetById(1);            
 
             var listName = userRepository.GetAll();
+
             foreach (var item in listName)
             {
                 Console.WriteLine(item.Name);
             }
 
+            item1.Name = "Was changed";
+            postRepository.Update(item1);
+
+            var itemUpdated = postRepository.GetById(1);
+            Console.WriteLine(itemUpdated.Name);
+
             Blog blog = new Blog(userRepository, postRepository);
-          
+
             blog.PublishPost(1, 1);
             blog.PublishPost(2, 2);
             blog.PublishPost(2, 1);
             blog.PublishPost(3, 1);
-            blog.PublishPost(1, 3);            
+            blog.PublishPost(1, 3);
         }
-        catch (DataException ex)
+        catch (EntityNotFoundException ex)
         {
             Console.WriteLine(ex.Message);            
-        }
-        catch (ArgumentException ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-#if (RELEASE)
-catch (Exception ex)
+        }        
+#if (DEBUG)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
             Console.WriteLine(ex.StackTrace);
